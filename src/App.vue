@@ -5,7 +5,7 @@ import Client, { Environment, Local } from "./lib/client.ts";
 import { onMounted, ref } from "vue";
 
 const env = import.meta.env.DEV ? Local : Environment("staging");
-const client = new Client(env);
+const client = new Client(Local);
 
 const urls = ref();
 
