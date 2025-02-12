@@ -31,6 +31,7 @@ export function PreviewEnv(pr: number | string): BaseURL {
  */
 export default class Client {
     public readonly api: api.ServiceClient
+    public readonly url: url.ServiceClient
 
 
     /**
@@ -42,6 +43,7 @@ export default class Client {
     constructor(target: BaseURL, options?: ClientOptions) {
         const base = new BaseClient(target, options ?? {})
         this.api = new api.ServiceClient(base)
+        this.url = new url.ServiceClient(base)
     }
 }
 
@@ -78,28 +80,10 @@ export namespace api {
             return await resp.json() as CounterResponse
         }
 
-        /**
-         * Get retrieves the original URL for the id.
-         */
-        public async get(id: string): Promise<url.URL> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/url/${encodeURIComponent(id)}`)
-            return await resp.json() as url.URL
-        }
-
         public async increment(): Promise<CounterResponse> {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI("POST", `/counter`)
             return await resp.json() as CounterResponse
-        }
-
-        /**
-         * shorten shortens a URL.
-         */
-        public async shorten(params: url.ShortenParams): Promise<url.URL> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/url`, JSON.stringify(params))
-            return await resp.json() as url.URL
         }
     }
 }
@@ -112,6 +96,32 @@ export namespace url {
     export interface URL {
         id: string
         url: string
+    }
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+        }
+
+        /**
+         * Get retrieves the original URL for the id.
+         */
+        public async get(id: string): Promise<URL> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/url/${encodeURIComponent(id)}`)
+            return await resp.json() as URL
+        }
+
+        /**
+         * shorten shortens a URL.
+         */
+        public async shorten(params: ShortenParams): Promise<URL> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("POST", `/url`, JSON.stringify(params))
+            return await resp.json() as URL
+        }
     }
 }
 
