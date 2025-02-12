@@ -34,7 +34,7 @@ export const get = api(
     const row = await db.queryRow`
         SELECT original_url FROM url WHERE id = ${id}
     `;
-    if (!row) throw APIError.notFound("url not found");
+    if (!row) throw APIError.notFound("url not found this time");
     return { id, url: row.original_url };
   }
 );
