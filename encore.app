@@ -5,5 +5,6 @@
 		"docker": {
 			"bundle_source": true
 		}
-	}
+	},
+	"debug": true
 }

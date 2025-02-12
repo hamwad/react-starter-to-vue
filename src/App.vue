@@ -1,11 +1,32 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView } from "vue-router";
+import HelloWorld from "@/components/HelloWorld.vue";
+import Client, { Environment, Local } from "./lib/client.ts";
+import { onMounted, ref } from "vue";
+
+const env = import.meta.env.DEV ? Local : Environment("staging");
+const client = new Client(env);
+
+const urls = ref();
+
+onMounted(() => {
+  client.url.list().then((data) => (urls.value = data.urls));
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div>
+    <h1>Hello</h1>
+    <pre>{{ urls }}</pre>
+  </div>
+  <!-- <header>
+    <img
+      alt="Vue logo"
+      class="logo"
+      src="@/assets/logo.svg"
+      width="125"
+      height="125"
+    />
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
@@ -15,7 +36,7 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
-  </header>
+  </header> -->
 
   <RouterView />
 </template>
