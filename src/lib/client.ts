@@ -89,6 +89,10 @@ export namespace api {
 }
 
 export namespace url {
+    export interface ListResponse {
+        urls: URL[]
+    }
+
     export interface ShortenParams {
         url: string
     }
@@ -112,6 +116,15 @@ export namespace url {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI("GET", `/url/${encodeURIComponent(id)}`)
             return await resp.json() as URL
+        }
+
+        /**
+         * List retrieves all URLs.
+         */
+        public async list(): Promise<ListResponse> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/url`)
+            return await resp.json() as ListResponse
         }
 
         /**
