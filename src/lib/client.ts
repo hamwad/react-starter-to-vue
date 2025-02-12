@@ -78,11 +78,40 @@ export namespace api {
             return await resp.json() as CounterResponse
         }
 
+        /**
+         * Get retrieves the original URL for the id.
+         */
+        public async get(id: string): Promise<url.URL> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/url/${encodeURIComponent(id)}`)
+            return await resp.json() as url.URL
+        }
+
         public async increment(): Promise<CounterResponse> {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI("POST", `/counter`)
             return await resp.json() as CounterResponse
         }
+
+        /**
+         * shorten shortens a URL.
+         */
+        public async shorten(params: url.ShortenParams): Promise<url.URL> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("POST", `/url`, JSON.stringify(params))
+            return await resp.json() as url.URL
+        }
+    }
+}
+
+export namespace url {
+    export interface ShortenParams {
+        url: string
+    }
+
+    export interface URL {
+        id: string
+        url: string
     }
 }
 
