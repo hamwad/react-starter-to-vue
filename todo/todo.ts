@@ -15,7 +15,7 @@ interface ListResponse {
 // `list` retrieves all todo items
 export const list = api(
   { expose: true, method: "GET", path: "/todo" },
-  async ({ title, completed }: Todo): Promise<ListResponse> => {
+  async (): Promise<ListResponse> => {
     const rows = db.query`
         SELECT title, completed
         FROM todo
