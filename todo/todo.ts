@@ -4,8 +4,9 @@ import { SQLDatabase } from "encore.dev/storage/sqldb";
 const db = new SQLDatabase("todo", { migrations: "./migrations" });
 
 interface Todo {
+  id: string;
   title: string;
-  completed: boolean;
+  done: boolean;
 }
 
 interface ListResponse {
@@ -17,12 +18,12 @@ export const list = api(
   { expose: true, method: "GET", path: "/todo" },
   async (): Promise<ListResponse> => {
     const rows = db.query`
-        SELECT title, completed
+        SELECT id, title, done
         FROM todo
         `;
     const todos: Todo[] = [];
     for await (const row of rows) {
-      todos.push({ title: row.title, completed: row.completed });
+      todos.push({ id: row.id, title: row.title, done: row.done });
     }
     return { todos };
   }
@@ -31,11 +32,11 @@ export const list = api(
 // `create` inserts a new item into the table
 export const create = api(
   { expose: true, method: "POST", path: "/todo" },
-  async ({ title, completed }: Todo): Promise<Todo> => {
+  async ({ id, title, done }: Todo): Promise<Todo> => {
     await db.exec`
-        INSERT INTO todo (title, completed)
-        VALUES (${title}, ${completed})
+        INSERT INTO todo (id, title, done)
+        VALUES (${id}, ${title}, ${done})
     `;
-    return { title, completed };
+    return { id, title, done };
   }
 );

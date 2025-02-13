@@ -1,6 +1,6 @@
 
 CREATE TABLE todo (
-    id BIGSERIAL PRIMARY KEY,
+    id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
     done BOOLEAN NOT NULL DEFAULT false
 );
