@@ -1,5 +1,5 @@
 
-CREATE TABLE todo_item (
+CREATE TABLE todo (
     id BIGSERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     done BOOLEAN NOT NULL DEFAULT false
